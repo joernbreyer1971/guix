@@ -21,7 +21,7 @@
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
 
-  ;; Dateisysteme & Partitionen (Exakt deine UUIDs vom Lenovo M900z)
+  ;; Dateisysteme & Partitionen
   (file-systems (cons* (file-system
                          (mount-point "/")
                          (device (uuid "0074c533-7b02-4afe-8417-3e0ce2ae6b9d" 'ext4))
@@ -48,14 +48,15 @@
                %base-user-accounts))
 
   ;; Software-Pakete
-  (packages (append (list
-                     ;; Wayland / Sway Stack
-                     sway waybar alacritty wofi swaybg grim slurp
-                     ;; Office, Grafik & Multimedia
-                     firefox chromium libreoffice geany krita audacity asunder okular celluloid
-                     ;; System & Utilities
-                     git tmux unzip wget yt-dlp fastfetch
-                     )
+  (packages (append (map specification->package
+                         '(
+                           ;; Wayland / Sway Stack
+                           "sway" "waybar" "alacritty" "wofi" "swaybg" "grim" "slurp"
+                           ;; Office, Grafik & Multimedia
+                           "firefox" "chromium" "libreoffice" "geany" "krita" "audacity" "asunder" "okular" "celluloid"
+                           ;; System & Utilities
+                           "git" "tmux" "unzip" "wget" "yt-dlp" "fastfetch"
+                           ))
                     %base-packages))
 
   ;; Systemdienste
