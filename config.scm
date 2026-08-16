@@ -21,10 +21,10 @@
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
 
-  ;; Dateisysteme & Partitionen (Exakt deine UUIDs vom Lenovo M900z)
+  ;; Dateisysteme & Partitionen
   (file-systems (cons* (file-system
                          (mount-point "/")
-                         (device (uuid "0074c533-7b02-4afe-8417-3e0ce2ae6b9d" 'ext4))
+                         (device (uuid "b6184e90-d9b4-45a6-bd72-6a9cea2ff5d0" 'ext4))
                          (type "ext4"))
                        (file-system
                          (mount-point "/home")
@@ -47,7 +47,7 @@
                  (supplementary-groups '("wheel" "netdev" "audio" "video" "kvm" "libvirt" "cdrom")))
                %base-user-accounts))
 
-  ;; Software-Pakete (robuste Syntax via specifications->package)
+  ;; Software-Pakete
   (packages (append (map specification->package
                          '(
                            ;; Wayland / Sway Stack
