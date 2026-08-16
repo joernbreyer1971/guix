@@ -1,8 +1,10 @@
 (use-modules (gnu)
              (gnu system)
-             (gnu services networking)
+             (gnu services)
              (gnu services desktop)
+             (gnu services networking)
              (gnu services virtualization)
+             (gnu packages)
              (nongnu packages linux)
              (nongnu system linux-initrd))
 
@@ -16,19 +18,19 @@
                 (bootloader grub-efi-bootloader)
                 (targets '("/boot/efi"))))
 
-  ;; Nonguix Kernel für Intel WLAN & Hardware-Kompatibilität
+  ;; Nonguix Kernel
   (kernel linux)
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
 
-  ;; Dateisysteme & Partitionen
+  ;; Dateisysteme (exakt deine UUIDs)
   (file-systems (cons* (file-system
                          (mount-point "/")
-                         (device (uuid "b6184e90-d9b4-45a6-bd72-6a9cea2ff5d0" 'ext4))
+                         (device (uuid "b6184e90-d9b4-45a6-bd72-6a9cea2ff5d0"))
                          (type "ext4"))
                        (file-system
                          (mount-point "/home")
-                         (device (uuid "35e2456f-34ca-4f99-8aec-a3f0c888217a" 'ext4))
+                         (device (uuid "35e2456f-34ca-4f99-8aec-a3f0c888217a"))
                          (type "ext4"))
                        (file-system
                          (mount-point "/boot/efi")
@@ -36,32 +38,26 @@
                          (type "vfat"))
                        %base-file-systems))
 
-  ;; Swap-Partition
+  ;; Swap
   (swap-devices (list (swap-space
                         (target (uuid "5a41ea9f-268c-4a4e-a030-d636aa47fbfc")))))
 
-  ;; Benutzer & Gruppen
+  ;; Benutzer
   (users (cons (user-account
                  (name "jay")
                  (group "users")
                  (supplementary-groups '("wheel" "netdev" "audio" "video" "kvm" "libvirt" "cdrom")))
                %base-user-accounts))
 
-  ;; Software-Pakete
+  ;; Pakete via string-lookup (verhindert 'unbound variable' Fehler)
   (packages (append (map specification->package
-                         '(
-                           ;; Wayland / Sway Stack
-                           "sway" "waybar" "alacritty" "wofi" "swaybg" "grim" "slurp"
-                           ;; Office, Grafik & Multimedia
+                         '("sway" "waybar" "alacritty" "wofi" "swaybg" "grim" "slurp"
                            "firefox" "libreoffice" "geany" "krita" "audacity" "asunder" "okular" "celluloid"
-                           ;; System & Utilities
-                           "git" "tmux" "unzip" "wget" "yt-dlp" "fastfetch"
-                           ))
+                           "git" "tmux" "unzip" "wget" "yt-dlp" "fastfetch"))
                     %base-packages))
 
-  ;; Systemdienste
+  ;; Dienste (ohne doppelte Einträge)
   (services (append (list
-                     (service network-manager-service-type)
                      (service bluetooth-service-type)
                      (service libvirt-service-type))
                     %desktop-services)))
