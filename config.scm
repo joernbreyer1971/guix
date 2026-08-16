@@ -40,7 +40,7 @@
   (swap-devices (list (swap-space
                         (target (uuid "5a41ea9f-268c-4a4e-a030-d636aa47fbfc")))))
 
-  ;; Benutzer & Gruppen (cdrom für Asunder, libvirt für VMs)
+  ;; Benutzer & Gruppen
   (users (cons (user-account
                  (name "jay")
                  (group "users")
@@ -58,7 +58,7 @@
                      )
                     %base-packages))
 
-  ;; Systemdienste (Netzwerk, Bluetooth, VMs, Pipewire via Desktop-Services)
+  ;; Systemdienste
   (services (append (list
                      (service network-manager-service-type)
                      (service bluetooth-service-type)
